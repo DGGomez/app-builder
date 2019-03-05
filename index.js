@@ -1,9 +1,13 @@
 #!/usr/bin/env node
-
+const fs = require('fs');
 const inquirer = require("inquirer");
 const chalk = require("chalk");
 const figlet = require("figlet");
 const shell = require("shelljs");
+const uuidv4 = require('uuid/v4');
+var exec = require('child_process').exec;
+
+var filename = uuidv4();
 
 const init = () => {
   console.log(
@@ -17,44 +21,84 @@ const init = () => {
   );
 }
 
-const createFile = (filename, extension) => {
-  const filePath = `${process.cwd()}/${filename}.${extension}`
-  shell.touch(filePath);
-  return filePath;
-};
+// add more questions as more languages come
 
 const askQuestions = () => {
   const questions = [
+//    {
+//      name: "App-Name",
+//     type: "input",
+//      message: "What is the name of your app?"
+//    },
     {
-      name: "FILENAME",
-      type: "input",
-      message: "What is the name of the file without extension?"
-    },
-    {
-      type: "list",
-      name: "EXTENSION",
+      type: "front end",
+      name: "type",
       message: "What is the file extension?",
-      choices: [".rb", ".js", ".php", ".css"],
+      choices: ["web app", "mobile app"],
       filter: function(val) {
         return val.split(".")[1];
       }
     }
+    
   ];
   return inquirer.prompt(questions);
 };
 
-const success = (filepath) => {
+const scripts = () => {
+  try{
+  var clone = await exec('./tasks/pull.sh', function(error, stdout, stderr) {
+    if (error) {
+      console.log(error.code);
+      process.exit();
+
+    }
+  });}
+  catch(err){
+    console.log(err);
+    process.exit();
+  }
+  
+    try{
+  var api = await exec('./tasks/add_api.sh', function(error, stdout, stderr) {
+    if (error) {
+      console.log(error.code);
+      process.exit();
+
+    }
+  });}
+  catch(err){
+    console.log(err);
+    process.exit();
+  }
+  
+   try{
+  var push = await exec('./tasks/push.sh', function(error, stdout, stderr) {
+    if (error) {
+      console.log(error.code);
+      process.exit();
+
+    }
+  });}
+  catch(err){
+    console.log(err);
+    process.exit();
+  }
+  
+};
+
+const success = () => {
   console.log(
-    chalk.white.bgGreen.bold(`Done! File created at ${filepath}`)
+    chalk.white.bgGreen.bold(`Done!`)
   );
 };
 
 const run = async () => {
+    const fd = fs.openSync(filename, 'w')
     init();    
     const answers = await askQuestions();
-    const { FILENAME, EXTENSION } = answers;
-    const filePath = createFile(FILENAME, EXTENSION);
-    success(filePath);
+    const { type } = answers;
+    
+    success();
 }
 
 run();
