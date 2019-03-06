@@ -7,3 +7,7 @@ git clone https://github.com/DGGomez/$2.git
 
 cd $2
 git fork
+
+#backend
+cd ..
+git clone https://github.com/DGGomez/$3.git
