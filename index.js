@@ -25,28 +25,62 @@ const init = () => {
 
 const askQuestions = () => {
   const questions = [
-//    {
-//      name: "App-Name",
-//     type: "input",
-//      message: "What is the name of your app?"
-//    },
+    {
+      name: "App-Name",
+     type: "input",
+      message: "What is the name of your app?"
+    },
     {
       type: "front end",
       name: "type",
-      message: "What is the file extension?",
+      message: "What kind of app is this?",
       choices: ["web app", "mobile app"],
       filter: function(val) {
         return val.split(".")[1];
       }
-    }
+    },
+    {
+      type: "Back end",
+      name: "backend",
+      message: "What language to use for your backend?",
+      choices: ["node js", "spring", "none"],
+      filter: function(val) {
+        return val.split(".")[1];
+      }
+    },
+    {
+      type: "Back end type",
+      name: "backend-type",
+      message: "What kind of database?",
+      choices: ["mongodb", "mysql", "none"],
+      filter: function(val) {
+        return val.split(".")[1];
+      }},
+        {
+      type: "Add Login",
+      name: "login",
+      message: "Do you need login in this app?",
+      choices: ["Yes", "No"],
+      filter: function(val) {
+        return val.split(".")[1];
+      }},
+//         {
+//       type: "Add a pipeline",
+//       name: "pipeline",
+//       message: "Add a pipeline to this?",
+//       choices: ["Yes", "No"],
+//       filter: function(val) {
+//         return val.split(".")[1];
+//       }}
     
+    // after this would need specification for pipeline
   ];
   return inquirer.prompt(questions);
 };
 
-const scripts = (type) => {
+const scripts = (filename, type, backend, backend-type, login) => {
   try{
-  var clone = await exec('./tasks/pull.sh', function(error, stdout, stderr) {
+  var clone = await exec(`./tasks/pull.sh ${filename} ${type} ${backend}`, function(error, stdout, stderr) {
     if (error) {
       console.log(error.code);
       process.exit();
@@ -58,21 +92,8 @@ const scripts = (type) => {
     process.exit();
   }
   
-    try{
-  var api = await exec('./tasks/add_main.sh', function(error, stdout, stderr) {
-    if (error) {
-      console.log(error.code);
-      process.exit();
-
-    }
-  });}
-  catch(err){
-    console.log(err);
-    process.exit();
-  }
-  
-      try{
-  var api = await exec('./tasks/add_api.sh', function(error, stdout, stderr) {
+  try{
+  var api = await exec(`.${filename}/add_api.sh ${backend-type}`, function(error, stdout, stderr) {
     if (error) {
       console.log(error.code);
       process.exit();
@@ -85,7 +106,7 @@ const scripts = (type) => {
   }
   
    try{
-  var push = await exec('./tasks/push.sh', function(error, stdout, stderr) {
+  var push = await exec(`./tasks/push.sh ${filename}`, function(error, stdout, stderr) {
     if (error) {
       console.log(error.code);
       process.exit();
@@ -123,8 +144,8 @@ const run = async () => {
     const fd = fs.openSync(filename, 'w')
     init();    
     const answers = await askQuestions();
-    const { type } = answers;
-    scripts(type);
+    const { name, type, backend, backend-type, login } = answers;
+    scripts(filename, type, backend, backend-type, login);
     success();
 }
 
