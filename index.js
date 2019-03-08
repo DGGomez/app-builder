@@ -44,7 +44,7 @@ const askQuestions = () => {
   return inquirer.prompt(questions);
 };
 
-const scripts = () => {
+const scripts = (type) => {
   try{
   var clone = await exec('./tasks/pull.sh', function(error, stdout, stderr) {
     if (error) {
@@ -59,6 +59,19 @@ const scripts = () => {
   }
   
     try{
+  var api = await exec('./tasks/add_main.sh', function(error, stdout, stderr) {
+    if (error) {
+      console.log(error.code);
+      process.exit();
+
+    }
+  });}
+  catch(err){
+    console.log(err);
+    process.exit();
+  }
+  
+      try{
   var api = await exec('./tasks/add_api.sh', function(error, stdout, stderr) {
     if (error) {
       console.log(error.code);
@@ -84,6 +97,20 @@ const scripts = () => {
     process.exit();
   }
   
+  // for future
+  
+//      try{
+//   var push = await exec('./tasks/set_pipeline.sh', function(error, stdout, stderr) {
+//     if (error) {
+//       console.log(error.code);
+//       process.exit();
+
+//     }
+//   });}
+//   catch(err){
+//     console.log(err);
+//     process.exit();
+//   }
 };
 
 const success = () => {
@@ -97,7 +124,7 @@ const run = async () => {
     init();    
     const answers = await askQuestions();
     const { type } = answers;
-    
+    scripts(type);
     success();
 }
 
