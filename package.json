@@ -2,7 +2,10 @@
   "name": "app-builder",
   "version": "1.0.0",
   "description": "builds apps and apis",
-  "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+        "app-builder": "./commands.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
