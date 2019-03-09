@@ -5,9 +5,9 @@ program
   .description('App Builder');
 
 program
-  .command('build <app name>')
+  .command('build')
   .alias('a')
   .description('Build an app')
-  .action('require('./index.js').run()');
+  .action(require('./index.js').run());
 
 program.parse(process.argv);

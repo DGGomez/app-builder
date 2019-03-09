@@ -50,7 +50,7 @@ const askQuestions = () => {
     },
     {
       type: "Back end type",
-      name: "backend-type",
+      name: "backendtype",
       message: "What kind of database?",
       choices: ["mongodb", "mysql", "none"],
       filter: function(val) {
@@ -78,7 +78,7 @@ const askQuestions = () => {
   return inquirer.prompt(questions);
 };
 
-const scripts = (filename, type, backend, backend-type, login) => {
+const scripts = async (filename, type, backend, backendtype, login) => {
   try{
   var clone = await exec(`./tasks/pull.sh ${filename} ${type} ${backend}`, function(error, stdout, stderr) {
     if (error) {
@@ -144,7 +144,7 @@ const run = async () => {
     const fd = fs.openSync(filename, 'w')
     init();    
     const answers = await askQuestions();
-    const { name, type, backend, backend-type, login } = answers;
+    const { name, type, backend, backendtype, login } = answers;
     scripts(filename, type, backend, backend-type, login);
     success();
 }

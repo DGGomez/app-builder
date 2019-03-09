@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "builds apps and apis",
   "preferGlobal": true,
+  "main": "index.js",
   "bin": {
-        "app-builder": "./commands.js"
+    "app-builder": "./commands.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,5 +19,14 @@
   "bugs": {
     "url": "https://github.com/DGGomez/app-builder/issues"
   },
-  "homepage": "https://github.com/DGGomez/app-builder#readme"
+  "homepage": "https://github.com/DGGomez/app-builder#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "child_process": "^1.0.2",
+    "commander": "^2.19.0",
+    "figlet": "^1.2.1",
+    "inquirer": "^6.2.2",
+    "shelljs": "^0.8.3",
+    "uuid": "^3.3.2"
+  }
 }
