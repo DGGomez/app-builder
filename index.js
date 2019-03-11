@@ -141,7 +141,9 @@ const success = () => {
 };
 
 const run = async () => {
-    const fd = fs.openSync(filename, 'w')
+    if (!fs.existsSync(filename)){
+    fs.mkdirSync(filename);
+    }
     init();    
     const answers = await askQuestions();
     const { name, type, backend, backendtype, login } = answers;
