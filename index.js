@@ -79,6 +79,12 @@ const askQuestions = () => {
 };
 
 const scripts = async (filename, type, backend, backendtype, login) => {
+  if(type.equals("web app"){
+     type = "react-template";
+     }
+    else if (type.equals("mobile app"){
+    type = "react-native-template";
+  }
   try{
   var clone = await exec(`./tasks/pull.sh ${filename} ${type} ${backend}`, function(error, stdout, stderr) {
     if (error) {
